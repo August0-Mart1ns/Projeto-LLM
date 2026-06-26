@@ -1,0 +1,38 @@
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --border: #2a2d3e;
+  --accent: #5b8af5;
+  --accent-dim: #1e2d54;
+  --green: #3dd68c;
+  --green-dim: #0e2e1e;
+  --yellow: #f5c842;
+  --yellow-dim: #2e2600;
+  --red: #f56b6b;
+  --text: #e2e4ef;
+  --muted: #6b7194;
+  --radius: 8px;
+  --font: "IBM Plex Sans", sans-serif;
+  --mono: "IBM Plex Mono", monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+button { cursor: pointer; font-family: var(--font); }
+input, select { font-family: var(--font); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

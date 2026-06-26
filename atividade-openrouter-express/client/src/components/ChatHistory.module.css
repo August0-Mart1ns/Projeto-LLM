@@ -1,0 +1,24 @@
+.history {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  padding: 40px;
+}
+
+.emptyIcon { font-size: 44px; margin-bottom: 14px; }
+
+.empty p { font-size: 13px; line-height: 1.8; }
+.empty strong { color: var(--text); }
