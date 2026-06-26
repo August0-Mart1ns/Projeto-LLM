@@ -116,8 +116,12 @@ Explique este tema como se fosse a primeira vez que ele vê, usando:
       });
     }
 
-    const data = await response.json();
-    const text = data.choices?.[0]?.message?.content;
+   const data = await response.json();
+
+console.log("Resposta OpenRouter:");
+console.log(JSON.stringify(data, null, 2));
+
+const text = data.choices?.[0]?.message?.content;
 
     if (!text) {
       return res.status(502).json({ erro: "Resposta vazia ou inesperada da IA." });
@@ -128,7 +132,7 @@ Explique este tema como se fosse a primeira vez que ele vê, usando:
       ...mensagens,
       { role: "assistant", content: text },
     ];
-
+ 
     res.json({
       modelo: MODEL,
       modo,
@@ -140,6 +144,8 @@ Explique este tema como se fosse a primeira vez que ele vê, usando:
       uso: data.usage ?? null,
     });
   } catch (error) {
+    console.error("ERRO COMPLETO:");
+  console.error(error);
     res.status(500).json({ erro: "Erro interno no servidor.", detalhe: error.message });
   }
 });

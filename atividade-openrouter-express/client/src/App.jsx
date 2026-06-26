@@ -24,8 +24,7 @@ export default function App() {
     setItems([]);
     setHistorico([]);
   }
-
-  async function handleSubmit() {
+async function handleSubmit() {
     const { materia, assunto, nivel } = form;
 
     if (!materia.trim() || !assunto.trim()) {
@@ -47,22 +46,38 @@ export default function App() {
     setLoading(true);
 
     try {
+      // 1. Faz a requisição usando a rota relativa do proxy
       const response = await fetch("/api/concurso", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ materia, assunto, nivel, modo, historico }),
       });
 
-      const data = await response.json();
+      // 2. LÊ O CORPO APENAS UMA VEZ (como texto) para segurança
+      const textoResposta = await response.text();
 
       removeItem(loadingId);
 
+      // 3. Se o servidor respondeu com erro (ex: 400, 500)
       if (!response.ok) {
-        addItem({ type: "error", text: data.erro || "Erro desconhecido." });
+        console.error("Erro do servidor:", textoResposta);
+        let msgErro = "Erro desconhecido no servidor.";
+        try {
+          const jsonErro = JSON.parse(textoResposta);
+          msgErro = jsonErro.erro || jsonErro.detalhe || msgErro;
+        } catch {
+          msgErro = textoResposta || msgErro;
+        }
+        addItem({ type: "error", text: msgErro });
         return;
       }
 
-      setHistorico(data.historico);
+      // 4. Se deu sucesso, transforma o texto em JSON
+      const data = JSON.parse(textoResposta);
+      console.log("Sucesso:", data);
+
+      // 5. Atualiza o estado com os dados limpos
+      setHistorico(data.historico || []);
 
       addItem({
         type:    "result",
@@ -72,12 +87,15 @@ export default function App() {
         resposta: data.resposta,
         tokens:  data.uso?.total_tokens ?? null,
       });
-    } catch {
+
+    } catch (error) {
+      console.error("Erro na requisição:", error);
       removeItem(loadingId);
       addItem({ type: "error", text: "Erro ao conectar com o servidor. Verifique se ele está rodando." });
     } finally {
       setLoading(false);
     }
+  }
   }
 
   // ── Helpers de estado ──────────────────────────────────────────────────
@@ -115,4 +133,4 @@ export default function App() {
       </main>
     </div>
   );
-}
+
